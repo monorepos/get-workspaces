@@ -3,7 +3,6 @@ use std::fs::File;
 use std::path::Path;
 use serde::{Serialize, Deserialize};
 use glob::glob;
-use std::env;
 use neon::prelude::*;
 use rayon::prelude::*;
 
@@ -16,22 +15,11 @@ struct Workspace {
 
 fn get_workspaces(mut cx: FunctionContext) -> JsResult<JsString> {
   let cwd_arg: String = cx.argument::<JsString>(0)?.value(&mut cx);
+  let cwd = PathBuf::from(cwd_arg).into_os_string();
 
-  let cwd;
-  if !cwd_arg.is_empty() {
-    cwd = env::current_dir().unwrap().into_os_string(); 
-  } else {
-    cwd = PathBuf::from(cwd_arg).into_os_string();
-  }
-  
-
-
-  // if (cwdFromArg.) {}
-  // let cwd = Path::new(cwdArg);
-  // let cwd = if condition { Path::new(cwdFromArg) } else {  };
   let mut pkg_jsons: Vec<PathBuf> = vec![];
-  // let mut pkgs: Vec<Workspace> = vec![];
   
+  // TODO: Actually find the root package.json file here
   let os_string = Path::new(&cwd).join("packages/*/package.json").into_os_string();
   let pkg_glob = os_string.to_str().unwrap();
   glob(&pkg_glob).expect("globbing failed")
