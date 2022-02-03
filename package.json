@@ -1,0 +1,25 @@
+{
+  "name": "get-workspaces",
+  "version": "1.0.0",
+  "description": "The premise of this repo is to investigate if Rush can be Javascript at copying hundreds of thousands of files quickly.",
+  "main": "./index.js",
+  "scripts": {
+    "build": "cargo-cp-artifact -nc lib/index.node -- cargo build --release --message-format=json-render-diagnostics",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcreamer898/rust-copy-bulk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcreamer898/rust-copy-bulk/issues"
+  },
+  "homepage": "https://github.com/jcreamer898/rust-copy-bulk#readme",
+  "dependencies": {
+    "cargo-cp-artifact": "^0.1.6"
+  },
+  "workspaces": ["packages"]
+}

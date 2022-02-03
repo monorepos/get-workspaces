@@ -1,0 +1,22 @@
+[package]
+name = "get-workspaces"
+version = "0.1.0"
+edition = "2018"
+exclude = ["index.node"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+fs_extra="1.2.0"
+rayon = "1"
+rand = "0.8"
+futures = "0.3"
+glob = "0.3.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies.neon]
+version = "0.9"
+default-features = false
+features = ["napi-6"]
