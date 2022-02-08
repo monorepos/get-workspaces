@@ -1,4 +1,6 @@
-const { getWorkspaces } = require('./lib/index.node');
+const { globRequire } = require('./lib/index.node');
+const findUp = require('find-up');
+const path = require('path');
 
 /**
  * @typedef {Object} Workspace
@@ -11,10 +13,20 @@ const { getWorkspaces } = require('./lib/index.node');
  * @param {string} cwd 
  * @returns {Workspace[]}
  */
-module.exports.getWorkspaces = (cwd) => {
-  const workspaces = getWorkspaces(cwd || process.cwd());
-  const workspacesJSON = JSON.parse(workspaces);
+module.exports.getWorkspaces = (cwd = process.cwd()) => {
+  const rootPkg = require(findUp.sync('package.json', { cwd }));
+  let globs = rootPkg.workspaces.packages || rootPkg.workspaces;
+  
+  let workspaces = [];
 
-  return workspacesJSON;
+  for (const glob of globs) {
+    console.log(path.join(cwd, glob))
+    const workspaces = globRequire(path.join(cwd, glob, "package.json"));
+    const workspacesJSON = JSON.parse(workspaces);
+    worspaces = workspaces.concat(workspacesJSON.workspaces);
+  }
+
+
+  return workspaces;
 };
 

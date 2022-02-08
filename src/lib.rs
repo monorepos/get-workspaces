@@ -13,15 +13,10 @@ struct Workspace {
   packageJson: serde_json::Value
 }
 
-fn get_workspaces(mut cx: FunctionContext) -> JsResult<JsString> {
-  let cwd_arg: String = cx.argument::<JsString>(0)?.value(&mut cx);
-  let cwd = PathBuf::from(cwd_arg).into_os_string();
-
+fn glob_require(mut cx: FunctionContext) -> JsResult<JsString> {
+  let pkg_glob: String = cx.argument::<JsString>(0)?.value(&mut cx);
   let mut pkg_jsons: Vec<PathBuf> = vec![];
   
-  // TODO: Actually find the root package.json file here
-  let os_string = Path::new(&cwd).join("packages/*/package.json").into_os_string();
-  let pkg_glob = os_string.to_str().unwrap();
   glob(&pkg_glob).expect("globbing failed")
     .map(|path| path.expect("globbing failed"))    
     .for_each(|entry| {
@@ -46,6 +41,6 @@ fn get_workspaces(mut cx: FunctionContext) -> JsResult<JsString> {
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
-  cx.export_function("getWorkspaces", get_workspaces)?;  
+  cx.export_function("globRequire", glob_require)?;  
   Ok(())
 }

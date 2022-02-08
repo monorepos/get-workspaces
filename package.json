@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/jcreamer898/rust-copy-bulk#readme",
   "dependencies": {
-    "cargo-cp-artifact": "^0.1.6"
-  },
-  "workspaces": ["packages"]
+    "cargo-cp-artifact": "^0.1.6",
+    "find-up": "^5.0.0"
+  }
 }
